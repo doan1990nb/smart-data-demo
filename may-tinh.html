@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'self'; worker-src blob:; frame-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; worker-src blob:; frame-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SMART DATA – Nền tảng số của quản trị hiện đại</title>
@@ -845,6 +845,7 @@ body.is-demo::after{content:"BẢN DEMO · dữ liệu giả lập";position:fix
 
 </style>
 <script>
+window.SMART_STATIC = true;
 window.SMART_DEMO = true;
 /*!
  * Chart.js v4.4.4
@@ -3392,7 +3393,7 @@ const Store = {
 
   // Phat hien che do: co api.php dang chay hay khong
   async detect() {
-    if (location.protocol === 'file:') return 'local';
+    if (location.protocol === 'file:' || window.SMART_STATIC) { Store.mode = 'local'; return 'local'; } // ban 1 file / trang demo tinh: khong goi mang
     try { const j = await Store.api('ping'); Store.mode = 'server'; return j; } catch (e) { Store.mode = 'local'; return 'local'; }
   },
 

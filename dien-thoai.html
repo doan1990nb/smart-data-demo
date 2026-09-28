@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'self'; worker-src blob:; frame-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; worker-src blob:; frame-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#7d1b2d">
@@ -219,6 +219,7 @@ body.m-sheet-on { overflow: hidden; } body.m-sheet-on .m-sheet-bg { opacity: 1; 
 <div id="m-app"></div>
 <noscript>Cần bật JavaScript để dùng SMART DATA.</noscript>
 <script>
+window.SMART_STATIC = true;
 /* =====================================================================
  * core.js — Lop du lieu & tinh toan (mart trong trinh duyet)
  * He thong Phan tich Nguon von – Du no (ban offline)
@@ -404,7 +405,7 @@ const Store = {
 
   // Phat hien che do: co api.php dang chay hay khong
   async detect() {
-    if (location.protocol === 'file:') return 'local';
+    if (location.protocol === 'file:' || window.SMART_STATIC) { Store.mode = 'local'; return 'local'; } // ban 1 file / trang demo tinh: khong goi mang
     try { const j = await Store.api('ping'); Store.mode = 'server'; return j; } catch (e) { Store.mode = 'local'; return 'local'; }
   },
 
