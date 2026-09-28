@@ -2,13 +2,15 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'self'; worker-src blob:; frame-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#7d1b2d">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SMART DATA">
-<meta name="version" content="1.10.0">
+<meta name="version" content="1.10.1">
 <title>SMART DATA Mobile</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230e2550'/%3E%3Cpath d='M5 10l7-4 7 4M7 11v6M12 11v6M17 11v6M5 19h14' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230e2550'/%3E%3Cpath d='M5 10l7-4 7 4M7 11v6M12 11v6M17 11v6M5 19h14' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
@@ -292,7 +294,7 @@ const DICT = {
 };
 DICT.map = {};
 for (const k of Object.keys(DICT)) if (Array.isArray(DICT[k])) DICT.map[k] = Object.fromEntries(DICT[k]);
-const LBL = (dict, code) => (DICT.map[dict] && DICT.map[dict][code]) || code || '—';
+const LBL = (dict, code) => (DICT.map[dict] && DICT.map[dict][code]) || (code ? U.esc(String(code)) : '—'); // ma la (tu file tai len) -> escape
 
 /* ---------------------- Cau hinh mac dinh (rule, trong so) ---------------------- */
 const DEFAULTS = {
@@ -4083,7 +4085,7 @@ if (typeof H === 'undefined') {
 }
 
 const M = {
-  VER: '1.10.0',
+  VER: '1.10.1',
   demo: false,
   F: { date: '', per: 'M', cn: 'ALL', unit: 'ALL', rm: '', seg: 'ALL' },
   tab: 'home', trendK: 'NV', unitK: 'DN', alertTab: 'alert', actF: 'OPEN',
@@ -4129,7 +4131,7 @@ const M = {
     M.ready();
   },
   splash(t) { return `<div class="m-splash"><div class="m-logo">${M.logo()}</div><b>SMART DATA</b><small>${M.esc(t)}</small><i class="m-spin"></i></div>`; },
-  fatal(t) { M.el().innerHTML = `<div class="m-splash"><div class="m-logo">${M.logo()}</div><b>SMART DATA</b><p class="m-err">${M.esc(t)}</p><button class="m-btn" onclick="location.reload()">Thử lại</button></div>`; },
+  fatal(t) { M.el().innerHTML = `<div class="m-splash"><div class="m-logo">${M.logo()}</div><b>SMART DATA</b><p class="m-err">${M.esc(t)}</p><button class="m-btn" id="m-retry">Thử lại</button></div>`; const b = document.getElementById('m-retry'); if (b) b.onclick = () => location.reload(); },
   logo() { const src = window.NVDN_LOGO || M.logoFile || ''; return src ? `<img src="${M.esc(src)}" alt="">` : `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10l7-4 7 4M7 11v6M12 11v6M17 11v6M5 19h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`; },
 
   /* Dang nhap (chi ban may chu) — cung tai khoan, cung chinh sach khoa/ghi nhat ky cua api.php */
